@@ -1,0 +1,65 @@
+/*
+ * This is a manifest file that'll automatically include all the stylesheets available in this directory
+ * and any sub-directories. You're free to add application-wide styles to this file and they'll appear at
+ * the top of the compiled file, but it's generally better to create a new file per style scope.
+ *= require_self
+ *= require_tree . 
+*/
+
+
+#pubnub_raw_console,#pubnub_readable_console{
+    width:100%;
+    height:200px;
+    overflow-x: scroll;
+}
+
+ul,#pool{
+    list-style-type: none;
+    padding-left: 0;
+    margin-left:0;
+}
+#pubnub_raw_console li{
+    height:40px;
+    font-size:12px;
+}
+#pubnub_readable_console li {
+    background: silver;
+    color:white;
+    width:98%;
+    height:40px;
+    border-radius:4px;
+    margin:3px;
+}
+#pubnub_readable_console li div{
+    float:left;
+    width:45%;
+}
+#pubnub_readable_console li div.indicator{
+    width:20px;
+    height:100%;
+}
+#pool{
+    height:500px;
+    overflow-x:scroll;
+}
+#pool li{
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1)));
+    height:70px;
+}
+#pool li h4{
+    width:90%;
+    float:left;
+}
+#pool li .is_vip{
+    height:100%;
+    float:left;
+}
+
+#pool li .is_vip img{
+    width:30px;
+    margin-top:15px;
+}
+#pool li button{
+    float:right;
+    margin:-50px 20px;
+}

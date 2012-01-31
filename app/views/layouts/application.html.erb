@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Motocab Rides Job</title>
+  <%= stylesheet_link_tag    "application" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+  <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+</head>
+<body>
+  <div class="topbar-wrapper" style="z-index: 5;">
+    <div class="topbar" data-dropdown="dropdown" >
+      <div class="topbar-inner">
+        <div class="container">
+          <h3><a href="#">Rides Manager</a></h3>
+          <ul class="nav">
+            <li class="active"><a href="#">Received: <span id="received_messages">0</span></a></li>
+            <li class="active"><a href="#"><div>Sended: <span id="sended_messages">0</span></div></a></li>
+            <li class="active"><a href="#"><div>Pool: <span id="how_much_in_pool">0</span></div></a></li>
+          </ul>
+          <ul class="nav secondary-nav">
+            <li class="dropdown">
+              <a href="#">Add a ride</a>
+            </li>
+            <li class="dropdown">
+              <a id="create_rides" href="#">Create 3 rides</a>
+            </li>
+          </ul>
+        </div>
+      </div><!-- /topbar-inner -->
+    </div><!-- /topbar -->
+  </div><!-- /topbar-wrapper -->
+<%= yield %>
+
+</body>
+</html>

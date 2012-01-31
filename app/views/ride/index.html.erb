@@ -1,0 +1,131 @@
+<table width="100%" class="bordered-table">
+    <tr>
+        <td colspan="2">
+        </td>
+    </tr>
+    <tr>
+        <td width="50%">
+            <h3>Ordered console</h3>
+            <div id="pubnub_readable_console">
+                <ul>
+                    <li style='color:green'><h3>INITIALIZING CONNECTION</h3></li>
+                </ul>
+            </div>
+            <h3>Raw console</h3>
+            <div id="pubnub_raw_console">
+                <ul>
+
+                </ul>
+            </div>
+        </td>
+        <td width="50%">
+            <h3>Rides Pool</h3>
+            <ul id="pool">
+                
+            </ul>
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+
+<div
+    id=pubnub
+    pub-key='pub-cd05c935-a2bf-492f-bf9d-51d8e6f5743c'
+    sub-key='sub-b3acd00a-33ea-11e1-8892-0580c1aae38d'
+    ssl=off
+    origin=pubsub.pubnub.com
+></div>
+
+
+<script src=http://cdn.pubnub.com/pubnub-3.1.min.js ></script>
+<script src=http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js></script>
+<script>
+    $(function(){
+        messages_received = messages_sended = 1;
+
+        function create_pool_line(v){
+            currently_in_pool = parseInt($("#how_much_in_pool").text());
+            currently_in_pool++;
+            $("#how_much_in_pool").html(currently_in_pool)
+            is_vip = v.vip?"<img src='/assets/star.png' width=15/>": "";
+               when_str = v.begin_at.split(' ') 
+               pick_up = "at "+when_str[0]+" - "+when_str[1];
+               $("#pool").prepend(
+                    "<li id='ride_"+v._id+"'>"+
+                        "<div class='is_vip'>"+is_vip+"</div>"+
+                        "<h5>From "+v.from+" to "+v.to+"</h5>"+
+                        "<h5>Pick up "+pick_up+"</h5>"+
+                        "<button data-id='"+v._id+"' class='btn success take_ride'> Take it</button>"+
+                    "</li>"
+               )
+        }
+
+        function remove_pool_line(id){
+            currently_in_pool = parseInt($("#how_much_in_pool").text())
+            currently_in_pool--
+            $("#how_much_in_pool").html(currently_in_pool);
+            $("li#ride_"+id).remove()
+        }
+
+        //THIS CREATE NEW FAKE DATA
+        $("#create_rides").click(function(){
+            $.get("/ride")
+        })
+        
+        //THIS GET THE CURRENT POOL
+        //AT THE PAGE LOADING
+        $.get("/rides",function(data){
+            $.each(data,function(i,v){create_pool_line(v)});
+        });
+
+
+        PUBNUB.subscribe({
+            channel  : 'pool',
+            callback : function(message) {
+
+                $("#received_messages").text(messages_received++)
+                //adding raw message to console
+                $("#pubnub_raw_console ul").prepend("<li><code>"+JSON.stringify(message)+"</code></li>")
+                if(message.from!=undefined){
+                    $("#pubnub_readable_console ul").prepend(
+                        "<li style='color:green'>"+
+                            "<div class='indicator' style='background-color:green'></div>"+
+                            "<div>From: "+message.from+"</div>"+
+                            "<div>To: "+message.to+"</div>"+
+                            "<div>asked: "+message.asked_at+"</div>"+
+                            "<div>when: "+message.begin_at+"</div>"+
+                        "</li>"
+                    )
+                    create_pool_line(message)   
+                }
+                else{
+                    message = $.parseJSON(message)
+                    $("#pubnub_readable_console ul").prepend(
+                        "<li style='color:red'>"+
+                            "<div class='indicator' style='background-color:red'></div>"+
+                            "<div>ID: "+message._id+"</div>"+
+                        "</li>"
+                    )
+                    remove_pool_line(message._id)
+                }    
+            },
+            connect : function(){
+                $("#pubnub_readable_console ul").prepend("<li style='color:green'><h3>CONNECTED</h3></li>")
+            },
+            error : function() {
+                alert("Houston, we've lost the connection to pool channel");
+            }
+        });
+
+
+        $(".take_ride").live('click',function(){
+            ride_id = $(this).data("id");
+            $.post("/ride/"+ride_id);
+        })
+
+    })
+</script>

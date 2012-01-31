@@ -1,0 +1,1 @@
+PN = Pubnub.new( 'pub-cd05c935-a2bf-492f-bf9d-51d8e6f5743c', 'sub-b3acd00a-33ea-11e1-8892-0580c1aae38d',"sec-88b17ef5-922a-44b9-a456-0578d1a79a8e",false )
